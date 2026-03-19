@@ -1,0 +1,545 @@
+/* =========================================
+   1. تنظیمات پایه و تم دارک (سیاه ملایم)
+========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: #18181b; 
+  color: #eaeaea; 
+  overflow-x: hidden;
+}
+
+.app-wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================
+   2. انیمیشن‌های عمومی
+========================================= */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   3. استایل‌های صفحه اول (انتخاب مربی)
+========================================= */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  color: #ff7b9c; 
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: #a1a1aa;
+  font-size: 1.1rem;
+}
+
+.header.hidden {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.back-btn-top {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: #27272a;
+  color: #ff7b9c;
+  border: 2px solid #ff7b9c;
+  border-radius: 12px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.back-btn-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.back-btn-top:hover {
+  background: #ff7b9c;
+  color: #18181b;
+}
+
+.coaches-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 15px;
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+}
+
+.coach {
+  background: transparent;
+  width: 260px; 
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  margin: 0 -10px; 
+}
+
+.coach:nth-child(1) { transform: translateY(20px) rotate(-4deg); z-index: 1; }
+.coach:nth-child(2) { transform: translateY(-10px) rotate(3deg); z-index: 2; }
+.coach:nth-child(3) { transform: translateY(15px) rotate(-2deg); z-index: 3; }
+.coach:nth-child(4) { transform: translateY(-5px) rotate(5deg); z-index: 4; }
+
+.coach:hover {
+  transform: scale(1.05) translateY(-20px) rotate(0deg) !important;
+  z-index: 20 !important;
+  filter: drop-shadow(0 15px 25px rgba(255, 123, 156, 0.15));
+}
+
+.svg-wrapper {
+  width: 210px; 
+  height: 210px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.coach-name {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #f4f4f5;
+  margin-bottom: 5px;
+  background: rgba(39, 39, 42, 0.85);
+  padding: 6px 16px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  text-align: center;
+}
+
+.coach.active {
+  transform: scale(1.15) translateY(-20px) rotate(0deg) !important;
+  z-index: 50 !important;
+  cursor: default;
+  filter: drop-shadow(0 20px 30px rgba(255, 123, 156, 0.2));
+  margin: 0 40px; 
+}
+
+.coach.hidden-coach {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.6) translateY(50px) !important;
+  position: absolute;
+}
+
+.speech-bubble {
+  background: #27272a;
+  padding: 15px 20px;
+  border-radius: 15px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #e4e4e7;
+  text-align: center;
+  margin-top: 15px;
+  position: relative;
+  display: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+  width: 280px; 
+  max-width: 85vw; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent #27272a transparent;
+}
+
+.coach.active .speech-bubble {
+  display: block;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.action-buttons {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  max-width: 280px; 
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.coach.active .action-buttons {
+  display: flex;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.1s;
+}
+
+.btn {
+  padding: 12px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #ff7b9c;
+  color: #18181b; 
+  box-shadow: 0 4px 15px rgba(255, 123, 156, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #ff5c85;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: #e4e4e7;
+  border: 2px solid #52525b;
+}
+
+.btn-outline:hover {
+  border-color: #ff7b9c;
+  color: #ff7b9c;
+}
+
+/* =========================================
+   4. سیستم تعقیب چشم (مردمک)
+========================================= */
+.pupil {
+  transition: transform 0.1s ease-out;
+}
+
+/* =========================================
+   5. استایل‌های صفحه فرم دو تکه
+========================================= */
+.split-screen {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #18181b; 
+  flex-direction: row;
+}
+
+.characters-half {
+  flex: 1.2; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent; 
+  position: relative;
+  overflow: hidden;
+}
+
+.compact-coaches-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  transform: scale(1.4); 
+  justify-items: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.compact-coach {
+  width: 180px; 
+  height: 180px;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.compact-coach:nth-child(1) { transform: translateY(30px) rotate(-8deg) translateX(40px); z-index: 1;}
+.compact-coach:nth-child(2) { transform: translateY(50px) rotate(8deg) translateX(-40px); z-index: 2;}
+.compact-coach:nth-child(3) { transform: translateY(-30px) rotate(-5deg) translateX(40px); z-index: 3;}
+.compact-coach:nth-child(4) { transform: translateY(-10px) rotate(5deg) translateX(-40px); z-index: 4;}
+
+.form-half {
+  flex: 0.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background-color: #18181b;
+}
+
+.form-box {
+  width: 100%;
+  max-width: 420px;
+  background: #27272a; 
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  text-align: right;
+  position: relative;
+  z-index: 10;
+}
+
+.form-box h2 {
+  color: #f4f4f5;
+  margin-bottom: 5px;
+}
+
+.form-subtitle {
+  color: #a1a1aa;
+  margin-bottom: 30px;
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #d4d4d8;
+  font-size: 0.95rem;
+}
+
+.input-group input {
+  padding: 15px;
+  border: 2px solid #3f3f46;
+  border-radius: 12px;
+  outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #18181b; 
+  color: #f4f4f5;
+}
+
+.input-group input:focus {
+  border-color: #ff7b9c;
+  background-color: #27272a;
+  box-shadow: 0 0 0 4px rgba(255, 123, 156, 0.1);
+}
+
+.error-container {
+  min-height: 22px;
+  margin-top: 5px;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.submit-btn, .back-form-btn {
+  margin-top: 15px;
+  width: 100%;
+}
+
+/* =========================================
+   6. انیمیشن احساسات کاراکترها
+========================================= */
+.mood-happy { transform: scale(0.95); }
+.mood-happy .compact-coach {
+  animation: floatHappy 2s infinite ease-in-out alternate;
+  filter: drop-shadow(0 0 25px rgba(168, 255, 180, 0.4));
+}
+
+.mood-sad { filter: grayscale(60%); }
+.mood-sad .compact-coach {
+  animation: shakeSad 0.4s ease-in-out;
+  filter: drop-shadow(0 0 25px rgba(255, 77, 79, 0.4));
+}
+
+.mood-tooltip {
+  position: absolute;
+  bottom: 40px;
+  background: #27272a;
+  padding: 12px 25px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: #ef4444;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s;
+  z-index: 10;
+}
+.mood-tooltip.happy { color: #4ade80; }
+
+@keyframes floatHappy {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-15px) rotate(3deg); }
+}
+
+@keyframes shakeSad {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px) rotate(-3deg); }
+  50% { transform: translateX(8px) rotate(3deg); }
+  75% { transform: translateX(-8px) rotate(-3deg); }
+}
+
+/* =========================================
+   7. صفحات موفقیت و داشبورد
+========================================= */
+.success-section, .next-page-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background: #18181b;
+}
+
+.success-card {
+  background: #27272a;
+  padding: 50px;
+  border-radius: 30px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.success-card h2 { color: #4ade80; }
+.success-card p { color: #a1a1aa; }
+
+/* =========================================
+   8. طراحی واکنش‌گرا (موبایل)
+========================================= */
+@media (max-width: 768px) {
+  .header h1 { font-size: 2rem; }
+  
+  .coaches-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    align-items: start;
+    margin-top: 10px;
+    gap: 15px 5px;
+  }
+  
+  .coach {
+    width: 170px; 
+    margin: 0;
+  }
+  
+  .coach:nth-child(1) { transform: translateY(10px) rotate(-6deg); }
+  .coach:nth-child(2) { transform: translateY(20px) rotate(6deg); }
+  .coach:nth-child(3) { transform: translateY(-10px) rotate(-4deg); }
+  .coach:nth-child(4) { transform: translateY(0px) rotate(4deg); }
+  
+  .svg-wrapper {
+    width: 140px; 
+    height: 140px;
+  }
+  
+  .coach-name { font-size: 1.1rem; }
+
+ .coach.active {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* مقیاس کاراکتر 1.2 است */
+    transform: translate(-50%, -40%) scale(1.2) !important; 
+    z-index: 1000;
+    margin: 0; 
+  }
+  
+  .coach.active .speech-bubble {
+    position: absolute;
+    top: -110px;
+    left: 50%;
+    
+    /* 
+      نکته طلایی اینجاست: 
+      چون والد 1.2 برابر بزرگ شده، ما حباب را با scale(0.83) کوچک میکنیم
+      (1 تقسیم بر 1.2 = 0.83) تا اثر بزرگنمایی والد خنثی شود.
+    */
+    transform: translateX(-50%) scale(0.83) !important; 
+    
+    /* حالا میتوانیم عرض حباب را با خیال راحت تنظیم کنیم */
+    width: 280px; 
+    max-width: none;
+    text-align: center;
+    z-index: 1001;
+    white-space: normal;
+    font-size: 1rem; 
+  }
+
+   .intro-container:has(.coach.active)::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(24, 24, 27, 0.85); 
+    z-index: 900;
+    backdrop-filter: blur(3px);
+  }
+
+  .speech-bubble {
+    font-size: 0.9rem;
+    padding: 12px;
+    width: 90vw; 
+    max-width: 300px;
+  }
+
+  .split-screen { flex-direction: column; }
+  .characters-half { padding: 30px 0; min-height: 40vh; }
+  .compact-coaches-container { transform: scale(0.95); }
+  .form-half { padding: 20px; min-height: 60vh; }
+  .form-box { padding: 30px 20px; }
+  .mood-tooltip { bottom: 10px; font-size: 0.85rem; }
+}
