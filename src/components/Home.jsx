@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
-// --- کاراکترهای SVG ---
+// --- کاراکترهای SVG (بدون تغییر) ---
 const BearCoach = ({ pupilStyle, isPasswordFocused }) => (
   <svg viewBox="0 0 200 200" width="100%" height="100%">
     <rect x="40" y="40" width="120" height="140" rx="60" fill="#8B4513" />
@@ -98,7 +98,6 @@ const coaches = [
   { id: 'panda', name: 'پاندا یوگا', desc: 'آرامش ذهن و انعطاف بدن...', Component: PandaCoach },
 ];
 
-// --- کامپوننت چشمک‌زن ---
 const BlinkingCoach = ({ Component, pupilStyle, isPasswordFocused }) => {
   const [isBlinking, setIsBlinking] = useState(false);
   useEffect(() => {
@@ -116,7 +115,6 @@ const BlinkingCoach = ({ Component, pupilStyle, isPasswordFocused }) => {
   return <Component pupilStyle={pupilStyle} isPasswordFocused={isPasswordFocused || isBlinking} />;
 };
 
-// --- کامپوننت اصلی منطق برنامه ---
 const FitnessApp = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -127,51 +125,79 @@ const FitnessApp = () => {
   const [mood, setMood] = useState('idle');
   const [focusedField, setFocusedField] = useState(null);
   const [pupilPos, setPupilPos] = useState({ x: 0, y: 0 });
+  const [currentUser, setCurrentUser] = useState(null); // نگهداری کاربر وارد شده
 
- useEffect(() => {
-  // اگر روی فیلد نام کاربری (username) کلیک شده بود
-  if (location.pathname === '/auth' && focusedField === 'username') {
-    // پیدا کردن فیلد ورودی که در حال حاضر فعال است
-    const activeInput = document.activeElement;
-    
-    if (activeInput) {
-      // محاسبه مختصات فیلد نسبت به کل صفحه
-      const rect = activeInput.getBoundingClientRect();
-      const inputCenterX = rect.left + rect.width / 2;
-      const inputCenterY = rect.top + rect.height / 2;
-
-      // تبدیل مختصات پیکسل به محدوده -5 تا 5 برای حرکت مردمک چشم
-      const x = (inputCenterX / window.innerWidth) * 10 - 5;
-      const y = (inputCenterY / window.innerHeight) * 10 - 5;
-
-      setPupilPos({ x, y });
+  useEffect(() => {
+    if (location.pathname === '/auth' && focusedField === 'username') {
+      const activeInput = document.activeElement;
+      if (activeInput) {
+        const rect = activeInput.getBoundingClientRect();
+        const inputCenterX = rect.left + rect.width / 2;
+        const inputCenterY = rect.top + rect.height / 2;
+        const x = (inputCenterX / window.innerWidth) * 10 - 5;
+        const y = (inputCenterY / window.innerHeight) * 10 - 5;
+        setPupilPos({ x, y });
+      }
+      return;
     }
-    return; // توقف اجرای بقیه کد (غیرفعال کردن تعقیب ماوس در این لحظه)
-  }
-
-  // منطق تعقیب ماوس (وقتی فوکوس روی فیلد نیست)
-  const handleMouseMove = (e) => {
-    const x = (e.clientX / window.innerWidth) * 10 - 5;
-    const y = (e.clientY / window.innerHeight) * 10 - 5;
-    setPupilPos({ x, y });
-  };
-
-  window.addEventListener('mousemove', handleMouseMove);
-  return () => window.removeEventListener('mousemove', handleMouseMove);
-}, [location.pathname, focusedField]);
-// به محض تغییر فوکوس، این افکت دوباره اجرا می‌شود
-
+    const handleMouseMove = (e) => {
+      const x = (e.clientX / window.innerWidth) * 10 - 5;
+      const y = (e.clientY / window.innerHeight) * 10 - 5;
+      setPupilPos({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [location.pathname, focusedField]);
 
   const pupilStyle = { transform: `translate(${pupilPos.x}px, ${pupilPos.y}px)` };
 
+  // --- منطق جدید ثبت‌نام و ورود ---
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (formData.username.length < 4 || formData.password.length < 6) {
-      setMood('sad');
-      setTimeout(() => setMood('idle'), 1000);
-    } else {
+    const existingUsers = JSON.parse(localStorage.getItem('fitness_users') || '[]');
+
+    if (authMode === 'register') {
+      // منطق ثبت‌نام
+      if (formData.username.length < 4 || formData.password.length < 6) {
+        setMood('sad');
+        setTimeout(() => setMood('idle'), 1500);
+        return;
+      }
+      
+      const userExists = existingUsers.find(u => u.username === formData.username);
+      if (userExists) {
+        alert("این نام کاربری قبلاً ثبت شده است.");
+        return;
+      }
+
+      const newUser = {
+        username: formData.username,
+        password: formData.password,
+        coach: selectedCoach || 'bear' // ذخیره مربی انتخابی
+      };
+
+      existingUsers.push(newUser);
+      localStorage.setItem('fitness_users', JSON.stringify(existingUsers));
+      
       setMood('dancing');
       setTimeout(() => navigate('/success'), 2000);
+
+    } else {
+      // منطق ورود
+      const user = existingUsers.find(
+        u => u.username === formData.username && u.password === formData.password
+      );
+
+      if (user) {
+        setCurrentUser(user);
+        setSelectedCoach(user.coach); // مربیِ خود کاربر را ست کن
+        setMood('dancing');
+        setTimeout(() => navigate('/dashboard'), 1500);
+      } else {
+        setMood('sad');
+        setTimeout(() => setMood('idle'), 1500);
+        alert("نام کاربری یا رمز عبور اشتباه است.");
+      }
     }
   };
 
@@ -215,11 +241,13 @@ const FitnessApp = () => {
             </div>
             <div className="form-half">
               <div id="k1" className="form-box">
-                <h2>{authMode === 'register' ? 'ثبت‌نام' : 'ورود'}</h2>
+                <h2>{authMode === 'register' ? 'ثبت‌نام جدید' : 'ورود به حساب'}</h2>
                 <form className="auth-form" onSubmit={handleFormSubmit}>
-                  <input  type="text" placeholder="آیدی" onFocus={() => setFocusedField('username')} onBlur={() => setFocusedField(null)} onChange={(e) => setFormData({...formData, username: e.target.value})} />
-                  <input type="password" placeholder="رمز عبور" onFocus={() => setFocusedField('password')} onBlur={() => setFocusedField(null)} onChange={(e) => setFormData({...formData, password: e.target.value})} />
-                  <button type="submit" className="btn btn-primary submit-btn">تایید</button>
+                  <input type="text" placeholder="آیدی (نام کاربری)" onFocus={() => setFocusedField('username')} onBlur={() => setFocusedField(null)} onChange={(e) => setFormData({...formData, username: e.target.value})} required />
+                  <input type="password" placeholder="رمز عبور" onFocus={() => setFocusedField('password')} onBlur={() => setFocusedField(null)} onChange={(e) => setFormData({...formData, password: e.target.value})} required />
+                  <button type="submit" className="btn btn-primary submit-btn">
+                    {authMode === 'register' ? 'تایید و ثبت‌نام' : 'ورود'}
+                  </button>
                   <button type="button" className="btn btn-outline back-form-btn" onClick={() => navigate('/')}>بازگشت</button>
                 </form>
               </div>
@@ -229,12 +257,24 @@ const FitnessApp = () => {
 
         <Route path="/success" element={
           <div className="success-section fade-in">
-            <div className="success-card"><h2>خوش آمدی قهرمان!</h2><button className="btn btn-primary" onClick={() => navigate('/dashboard')}>ورود به پنل</button></div>
+            <div className="success-card">
+              <h2>ثبت‌نام با موفقیت انجام شد!</h2>
+              <p>حالا می‌توانید وارد شوید.</p>
+              <button className="btn btn-primary" onClick={() => { setAuthMode('login'); navigate('/auth'); }}>بریم برای ورود</button>
+            </div>
           </div>
         } />
 
         <Route path="/dashboard" element={
-          <div className="next-page-section fade-in"><h1>داشبورد تمرینات شما 💪</h1><button className="btn btn-outline" onClick={() => navigate('/')}>خروج</button></div>
+          <div className="next-page-section fade-in">
+            <div style={{width: '150px', margin: '0 auto'}}>
+               {/* نمایش مربیِ مخصوص این کاربر */}
+               {selectedCoach && <BlinkingCoach Component={coaches.find(c => c.id === selectedCoach).Component} pupilStyle={pupilStyle} />}
+            </div>
+            <h1>خوش آمدی {currentUser?.username}! 💪</h1>
+            <p>مربی {selectedCoach} منتظر تمرین امروزته.</p>
+            <button className="btn btn-outline" onClick={() => navigate('/')}>خروج از حساب</button>
+          </div>
         } />
       </Routes>
     </main>
