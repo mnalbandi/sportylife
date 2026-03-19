@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 // =========================================================
-// کامپوننت‌های وکتور کاراکترها با قابلیت بسته شدن چشم‌ها
+// کامپوننت‌های وکتور کاراکترها (بدون تغییر در ساختار اصلی)
 // =========================================================
 
 const BearCoach = ({ pupilStyle, isPasswordFocused }) => (
@@ -121,30 +121,53 @@ const coaches = [
   { id: 'panda', name: 'پاندا یوگا', desc: 'آرامش ذهن و انعطاف بدن...', Component: PandaCoach },
 ];
 
+// =========================================================
+// کامپوننت پوشش‌دهنده برای مدیریت چشمک‌زدن رندوم
+// =========================================================
+const BlinkingCoach = ({ Component, pupilStyle, isPasswordFocused }) => {
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  useEffect(() => {
+    let timeout;
+    const triggerBlink = () => {
+      setIsBlinking(true);
+      setTimeout(() => {
+        setIsBlinking(false);
+        // زمان رندوم بین 2 تا 6 ثانیه برای چشمک بعدی
+        timeout = setTimeout(triggerBlink, Math.random() * 4000 + 2000);
+      }, 150); // مدت زمان بسته بودن چشم
+    };
+
+    // شروع با تاخیر رندوم اولیه برای اینکه همه با هم نزنند
+    timeout = setTimeout(triggerBlink, Math.random() * 3000);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return <Component pupilStyle={pupilStyle} isPasswordFocused={isPasswordFocused || isBlinking} />;
+};
+
+// =========================================================
+// کامپوننت اصلی برنامه
+// =========================================================
 function App() {
   const [view, setView] = useState('intro'); // intro, auth, success, dashboard
   const [selectedCoach, setSelectedCoach] = useState(null);
   const [authMode, setAuthMode] = useState('register'); // register, login
   
-  // حالت‌های فرم و احساسات
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errors, setErrors] = useState({});
   const [mood, setMood] = useState('idle'); // idle, sad, dancing
   const [focusedField, setFocusedField] = useState(null); // 'username', 'password', or null
 
-  // تعقیب چشم‌ها
   const [pupilPos, setPupilPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      // اگر روی فیلد آیدی فوکوس است، به فرم نگاه کن
       if (view === 'auth' && focusedField === 'username') {
         const isMobile = window.innerWidth <= 768;
         setPupilPos({ x: isMobile ? 0 : 4, y: isMobile ? 5 : 2 });
         return;
       }
-
-      // اگر فرم بسته است یا ماوس تکان می‌خورد و فیلد آیدی فوکوس نیست
       const x = (e.clientX / window.innerWidth) * 10 - 5;
       const y = (e.clientY / window.innerHeight) * 10 - 5;
       setPupilPos({ x, y });
@@ -182,7 +205,7 @@ function App() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setErrors(prev => ({ ...prev, [name]: '' }));
-    setMood('idle'); // برداشتن حالت ناراحتی هنگام تایپ مجدد
+    setMood('idle');
   };
 
   const handleSubmit = (e) => {
@@ -199,11 +222,11 @@ function App() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setMood('sad'); // ناراحت شدن بدون پیام (فقط تغییر رنگ و لرزش)
+      setMood('sad');
       setTimeout(() => setMood('idle'), 800);
     } else {
       setErrors({});
-      setMood('dancing'); // شروع رقص رندوم
+      setMood('dancing');
       setTimeout(() => setView('success'), 2500);
     }
   };
@@ -237,7 +260,8 @@ function App() {
                   onClick={() => handleSelectCoach(coach.id)}
                 >
                   <figure className="svg-wrapper">
-                    <coach.Component pupilStyle={pupilStyle} />
+                    {/* استفاده از کامپوننت چشمک‌زن */}
+                    <BlinkingCoach Component={coach.Component} pupilStyle={pupilStyle} />
                   </figure>
                   <h3 className="coach-name">{coach.name}</h3>
                   
@@ -265,7 +289,9 @@ function App() {
             <div className="compact-coaches-container">
               {coaches.map(coach => (
                 <figure key={coach.id} className="compact-coach">
-                  <coach.Component 
+                  {/* استفاده از کامپوننت چشمک‌زن با رعایت وضعیت فوکوس پسورد */}
+                  <BlinkingCoach 
+                    Component={coach.Component} 
                     pupilStyle={pupilStyle} 
                     isPasswordFocused={focusedField === 'password'} 
                   />
