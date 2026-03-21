@@ -1,5 +1,5 @@
 /* =========================================
-   1. تنظیمات پایه و تم دارک (سیاه ملایم)
+   1. تنظیمات پایه و تم ورزشی دارک
 ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
 
@@ -9,25 +9,64 @@
   padding: 0;
 }
 
-body {
-  font-family: 'Vazirmatn', sans-serif;
-  background-color: #18181b; 
-  color: #eaeaea; 
-  overflow-x: hidden;
-}
-#k1{
-  text-align: center;
-}
-#k1 h1{
-  margin-bottom: 5px;
+:root {
+  --sport-red:     #ff3c3c;
+  --sport-orange:  #ff6b1a;
+  --sport-yellow:  #ffd000;
+  --sport-green:   #00e676;
+  --sport-blue:    #00b4ff;
+  --dark-bg:       #111214;
+  --dark-card:     #1a1c20;
+  --dark-surface:  #22252b;
+  --dark-border:   #2e3138;
+  --text-primary:  #f0f0f0;
+  --text-secondary:#8a8f9a;
+  --accent:        #ff3c3c;
+  --accent-glow:   rgba(255, 60, 60, 0.25);
 }
 
-#k1 input{
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  /* خطوط زمین ورزشگاه در پس‌زمینه */
+  background-image:
+    linear-gradient(rgba(255,60,60,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,60,60,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* =========================================
+   2. تایپوگرافی ورزشی
+========================================= */
+#k1 {
+  text-align: center;
+}
+
+#k1 h1 {
+  margin-bottom: 5px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+#k1 input {
   margin: 5px;
-  padding: 5px;
+  padding: 8px 16px;
   text-align: center;
   font-size: 15px;
-  border-radius: 10px;
+  border-radius: 8px;
+  background: var(--dark-surface);
+  border: 2px solid var(--dark-border);
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+#k1 input:focus {
+  outline: none;
+  border-color: var(--accent);
 }
 
 .app-wrapper {
@@ -46,7 +85,21 @@ body {
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* نور دوار ورزشگاه */
+@keyframes stadiumLight {
+  0%   { opacity: 0.4; transform: scale(1); }
+  50%  { opacity: 0.7; transform: scale(1.05); }
+  100% { opacity: 0.4; transform: scale(1); }
+}
+
+/* پالس قرمز برای المان‌های اکتیو */
+@keyframes redPulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-glow); }
+  70%  { box-shadow: 0 0 0 12px rgba(255,60,60,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,60,60,0); }
 }
 
 /* =========================================
@@ -63,6 +116,25 @@ body {
   min-height: 100vh;
 }
 
+/* نوار بالای صفحه مثل تابلوی امتیاز */
+.container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--sport-red),
+    var(--sport-orange),
+    var(--sport-yellow),
+    var(--sport-green),
+    var(--sport-blue)
+  );
+  z-index: 999;
+}
+
 .header {
   text-align: center;
   margin-bottom: 40px;
@@ -71,14 +143,25 @@ body {
 }
 
 .header h1 {
-  font-size: 2.5rem;
-  color: #ff7b9c; 
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  /* گرادیان آتشین */
+  background: linear-gradient(135deg, var(--sport-red) 0%, var(--sport-orange) 50%, var(--sport-yellow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 10px;
+  /* سایه متن قوی */
+  filter: drop-shadow(0 0 20px rgba(255, 107, 26, 0.4));
 }
 
 .header p {
-  color: #a1a1aa;
-  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 1px;
 }
 
 .header.hidden {
@@ -87,23 +170,30 @@ body {
   position: absolute;
 }
 
+/* =========================================
+   دکمه بازگشت - استایل ورزشی
+========================================= */
 .back-btn-top {
   position: absolute;
   top: 20px;
   right: 20px;
-  padding: 10px 20px;
-  background: #27272a;
-  color: #ff7b9c;
-  border: 2px solid #ff7b9c;
-  border-radius: 12px;
+  padding: 10px 22px;
+  background: var(--dark-surface);
+  color: var(--sport-red);
+  border: 2px solid var(--sport-red);
+  border-radius: 8px;
   font-family: inherit;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
   transform: translateX(20px);
   transition: all 0.3s ease;
   z-index: 100;
+  /* خط مورب ورزشی در پس‌زمینه دکمه */
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
 }
 
 .back-btn-top.visible {
@@ -113,10 +203,14 @@ body {
 }
 
 .back-btn-top:hover {
-  background: #ff7b9c;
-  color: #18181b;
+  background: var(--sport-red);
+  color: #fff;
+  box-shadow: 0 0 20px var(--accent-glow);
 }
 
+/* =========================================
+   کارت‌های مربیان
+========================================= */
 .coaches-row {
   display: flex;
   justify-content: center;
@@ -130,7 +224,7 @@ body {
 
 .coach {
   background: transparent;
-  width: 260px; 
+  width: 260px;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -138,45 +232,92 @@ body {
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
-  margin: 0 -10px; 
+  margin: 0 -10px;
 }
 
-.coach:nth-child(1) { transform: translateY(20px) rotate(-4deg); z-index: 1; }
-.coach:nth-child(2) { transform: translateY(-10px) rotate(3deg); z-index: 2; }
-.coach:nth-child(3) { transform: translateY(15px) rotate(-2deg); z-index: 3; }
-.coach:nth-child(4) { transform: translateY(-5px) rotate(5deg); z-index: 4; }
+/* هاله رنگی منحصربه‌فرد هر مربی */
+.coach:nth-child(1) {
+  transform: translateY(20px) rotate(-4deg);
+  z-index: 1;
+  --coach-color: #ff6b1a;
+}
+
+.coach:nth-child(2) {
+  transform: translateY(-10px) rotate(3deg);
+  z-index: 2;
+  --coach-color: #00b4ff;
+}
+
+.coach:nth-child(3) {
+  transform: translateY(15px) rotate(-2deg);
+  z-index: 3;
+  --coach-color: #ffd000;
+}
+
+.coach:nth-child(4) {
+  transform: translateY(-5px) rotate(5deg);
+  z-index: 4;
+  --coach-color: #00e676;
+}
 
 .coach:hover {
   transform: scale(1.05) translateY(-20px) rotate(0deg) !important;
   z-index: 20 !important;
-  filter: drop-shadow(0 15px 25px rgba(255, 123, 156, 0.15));
+  filter: drop-shadow(0 15px 30px color-mix(in srgb, var(--coach-color) 40%, transparent));
 }
 
-.svg-wrapper {
-  width: 210px; 
-  height: 210px;
-  margin-bottom: 15px;
+/* نشانگر ورزشی زیر کاراکتر هنگام hover */
+.coach::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--coach-color), transparent);
+  border-radius: 2px;
   transition: transform 0.3s ease;
 }
 
+.coach:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.svg-wrapper {
+  width: 210px;
+  height: 210px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+  /* پس‌زمینه کارت SVG مثل زمین بازی */
+  background: radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--coach-color) 8%, transparent), transparent 70%);
+  border-radius: 50% 50% 20px 20px;
+}
+
+/* نام مربی با استایل برچسب ورزشی */
 .coach-name {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 900;
-  color: #f4f4f5;
+  color: #fff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   margin-bottom: 5px;
-  background: rgba(39, 39, 42, 0.85);
-  padding: 6px 16px;
-  border-radius: 12px;
-  backdrop-filter: blur(4px);
+  background: var(--dark-surface);
+  padding: 6px 18px;
+  border-radius: 6px;
+  border-right: 3px solid var(--coach-color);
+  /* برش کنج ورزشی */
+  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
   text-align: center;
 }
 
+/* مربی انتخاب‌شده */
 .coach.active {
   transform: scale(1.15) translateY(-20px) rotate(0deg) !important;
   z-index: 50 !important;
   cursor: default;
-  filter: drop-shadow(0 20px 30px rgba(255, 123, 156, 0.2));
-  margin: 0 40px; 
+  filter: drop-shadow(0 20px 40px color-mix(in srgb, var(--coach-color) 50%, transparent));
+  margin: 0 40px;
 }
 
 .coach.hidden-coach {
@@ -186,22 +327,31 @@ body {
   position: absolute;
 }
 
+/* =========================================
+   حباب گفتار - استایل تابلوی امتیاز
+========================================= */
 .speech-bubble {
-  background: #27272a;
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
   padding: 15px 20px;
-  border-radius: 15px;
+  border-radius: 12px;
   font-size: 1rem;
-  line-height: 1.6;
-  color: #e4e4e7;
+  line-height: 1.7;
+  color: var(--text-primary);
   text-align: center;
   margin-top: 15px;
   position: relative;
   display: none;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-  width: 280px; 
-  max-width: 85vw; 
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.5),
+    0 0 0 1px var(--dark-border),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  width: 280px;
+  max-width: 85vw;
   margin-left: auto;
   margin-right: auto;
+  /* خط رنگی بالای حباب */
+  border-top: 2px solid var(--coach-color, var(--accent));
 }
 
 .speech-bubble::before {
@@ -212,7 +362,19 @@ body {
   transform: translateX(-50%);
   border-width: 0 10px 10px 10px;
   border-style: solid;
-  border-color: transparent transparent #27272a transparent;
+  border-color: transparent transparent var(--dark-surface) transparent;
+}
+
+/* خط رنگی بالای مثلث */
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 11px 11px 11px;
+  border-style: solid;
+  border-color: transparent transparent var(--coach-color, var(--accent)) transparent;
 }
 
 .coach.active .speech-bubble {
@@ -220,11 +382,14 @@ body {
   animation: fadeIn 0.4s ease forwards;
 }
 
+/* =========================================
+   دکمه‌های اکشن
+========================================= */
 .action-buttons {
   display: none;
   flex-direction: column;
   width: 100%;
-  max-width: 280px; 
+  max-width: 280px;
   gap: 10px;
   margin-top: 15px;
 }
@@ -236,89 +401,167 @@ body {
 }
 
 .btn {
-  padding: 12px;
-  border-radius: 12px;
+  padding: 13px;
+  border-radius: 8px;
   font-family: inherit;
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
+  position: relative;
+  overflow: hidden;
+  /* برش ورزشی گوشه */
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+
+/* افکت نور عبوری روی دکمه */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.4s ease;
+}
+
+.btn:hover::before {
+  left: 150%;
 }
 
 .btn-primary {
-  background-color: #ff7b9c;
-  color: #18181b; 
-  box-shadow: 0 4px 15px rgba(255, 123, 156, 0.3);
+  background: linear-gradient(135deg, var(--sport-red), var(--sport-orange));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(255, 60, 60, 0.35);
 }
 
 .btn-primary:hover {
-  background-color: #ff5c85;
+  background: linear-gradient(135deg, #ff1a1a, var(--sport-red));
   transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 60, 60, 0.5);
 }
 
 .btn-outline {
   background-color: transparent;
-  color: #e4e4e7;
-  border: 2px solid #52525b;
+  color: var(--text-primary);
+  border: 2px solid var(--dark-border);
+  clip-path: none;
+  border-radius: 8px;
 }
 
 .btn-outline:hover {
-  border-color: #ff7b9c;
-  color: #ff7b9c;
+  border-color: var(--sport-red);
+  color: var(--sport-red);
+  background: rgba(255, 60, 60, 0.05);
 }
 
 /* =========================================
-   4. سیستم تعقیب چشم (مردمک)
+   4. سیستم تعقیب چشم
 ========================================= */
 .pupil {
   transition: transform 0.1s ease-out;
 }
 
 /* =========================================
-   5. استایل‌های صفحه فرم دو تکه
+   5. صفحه فرم دو تکه
 ========================================= */
 .split-screen {
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background-color: #18181b; 
+  background-color: var(--dark-bg);
   flex-direction: row;
 }
 
+/* نیمه کاراکترها - زمین ورزشی */
 .characters-half {
-  flex: 1.2; 
+  flex: 1.2;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: transparent; 
+  background:
+    /* خطوط زمین */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 58px,
+      rgba(255, 60, 60, 0.04) 58px,
+      rgba(255, 60, 60, 0.04) 60px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 58px,
+      rgba(255, 60, 60, 0.04) 58px,
+      rgba(255, 60, 60, 0.04) 60px
+    ),
+    var(--dark-card);
   position: relative;
   overflow: hidden;
+}
+
+/* نور وسط زمین */
+.characters-half::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 60, 60, 0.08);
+  box-shadow: 0 0 60px rgba(255, 60, 60, 0.04) inset;
+  pointer-events: none;
+  animation: stadiumLight 4s ease-in-out infinite;
+}
+
+/* نیم‌دایره وسط زمین */
+.characters-half::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 60, 60, 0.06);
+  pointer-events: none;
 }
 
 .compact-coaches-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
-  transform: scale(1.4); 
+  transform: scale(1.4);
   justify-items: center;
   align-items: center;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  z-index: 2;
 }
 
 .compact-coach {
-  width: 180px; 
+  width: 180px;
   height: 180px;
   background: transparent;
   transition: all 0.3s ease;
 }
 
-.compact-coach:nth-child(1) { transform: translateY(30px) rotate(-8deg) translateX(40px); z-index: 1;}
-.compact-coach:nth-child(2) { transform: translateY(50px) rotate(8deg) translateX(-40px); z-index: 2;}
-.compact-coach:nth-child(3) { transform: translateY(-30px) rotate(-5deg) translateX(40px); z-index: 3;}
-.compact-coach:nth-child(4) { transform: translateY(-10px) rotate(5deg) translateX(-40px); z-index: 4;}
+.compact-coach:nth-child(1) { transform: translateY(30px)  rotate(-8deg) translateX(40px);  z-index: 1; }
+.compact-coach:nth-child(2) { transform: translateY(50px)  rotate(8deg)  translateX(-40px); z-index: 2; }
+.compact-coach:nth-child(3) { transform: translateY(-30px) rotate(-5deg) translateX(40px);  z-index: 3; }
+.compact-coach:nth-child(4) { transform: translateY(-10px) rotate(5deg)  translateX(-40px); z-index: 4; }
 
+/* =========================================
+   نیمه فرم
+========================================= */
 .form-half {
   flex: 0.8;
   display: flex;
@@ -326,30 +569,71 @@ body {
   justify-content: center;
   align-items: center;
   padding: 40px;
-  background-color: #18181b;
+  background-color: var(--dark-bg);
+  /* خط جداکننده ورزشی */
+  border-right: 1px solid var(--dark-border);
+  position: relative;
+}
+
+/* نوار رنگی عمودی کنار فرم */
+.form-half::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  height: 80%;
+  width: 3px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--sport-red) 30%,
+    var(--sport-orange) 60%,
+    transparent
+  );
+  border-radius: 2px;
 }
 
 .form-box {
   width: 100%;
   max-width: 420px;
-  background: #27272a; 
+  background: var(--dark-card);
   padding: 40px;
-  border-radius: 24px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 0 1px var(--dark-border);
   text-align: right;
   position: relative;
   z-index: 10;
+  /* خط رنگی بالای کارت */
+  border-top: 3px solid var(--sport-red);
+}
+
+/* نشان ورزشی گوشه کارت */
+.form-box::before {
+  content: '⚡';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark-card);
+  padding: 0 10px;
+  font-size: 1.4rem;
 }
 
 .form-box h2 {
-  color: #f4f4f5;
+  color: var(--text-primary);
+  font-weight: 900;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
   margin-bottom: 5px;
 }
 
 .form-subtitle {
-  color: #a1a1aa;
+  color: var(--text-secondary);
   margin-bottom: 30px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
 }
 
 .auth-form {
@@ -357,49 +641,73 @@ body {
   flex-direction: column;
 }
 
+/* =========================================
+   گروه اینپوت - استایل ورزشی
+========================================= */
 .input-group {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
 }
 
 .input-group label {
   margin-bottom: 8px;
-  font-weight: 600;
-  color: #d4d4d8;
-  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 .input-group input {
-  padding: 15px;
-  border: 2px solid #3f3f46;
-  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--dark-border);
+  border-radius: 8px;
   outline: none;
   font-family: inherit;
   font-size: 1rem;
   transition: all 0.3s ease;
-  background-color: #18181b; 
-  color: #f4f4f5;
+  background-color: var(--dark-surface);
+  color: var(--text-primary);
+  /* خط پایین اینپوت مثل خط شروع دو */
+  border-bottom: 2px solid var(--dark-border);
 }
 
 .input-group input:focus {
-  border-color: #ff7b9c;
-  background-color: #27272a;
-  box-shadow: 0 0 0 4px rgba(255, 123, 156, 0.1);
+  border-color: var(--sport-red);
+  border-bottom-color: var(--sport-red);
+  background-color: var(--dark-card);
+  box-shadow:
+    0 0 0 3px rgba(255, 60, 60, 0.08),
+    0 4px 12px rgba(0,0,0,0.2);
+}
+
+.input-group input::placeholder {
+  color: #4a4f5a;
 }
 
 .error-container {
   min-height: 22px;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .error-text {
-  color: #ef4444;
-  font-size: 0.85rem;
-  font-weight: bold;
+  color: var(--sport-red);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.submit-btn, .back-form-btn {
+.error-text::before {
+  content: '⚠';
+  font-size: 0.75rem;
+}
+
+.submit-btn,
+.back-form-btn {
   margin-top: 15px;
   width: 100%;
 }
@@ -407,73 +715,127 @@ body {
 /* =========================================
    6. انیمیشن احساسات کاراکترها
 ========================================= */
-.mood-happy { transform: scale(0.95); }
+.mood-happy {
+  transform: scale(0.95);
+}
+
 .mood-happy .compact-coach {
   animation: floatHappy 2s infinite ease-in-out alternate;
-  filter: drop-shadow(0 0 25px rgba(168, 255, 180, 0.4));
+  filter: drop-shadow(0 0 30px rgba(0, 230, 118, 0.45));
 }
 
-.mood-sad { filter: grayscale(60%); }
+.mood-sad {
+  filter: grayscale(50%);
+}
+
 .mood-sad .compact-coach {
   animation: shakeSad 0.4s ease-in-out;
-  filter: drop-shadow(0 0 25px rgba(255, 77, 79, 0.4));
+  filter: drop-shadow(0 0 30px rgba(255, 60, 60, 0.5));
 }
 
+/* نوتیفیکیشن حالت مربی */
 .mood-tooltip {
   position: absolute;
   bottom: 40px;
-  background: #27272a;
-  padding: 12px 25px;
-  border-radius: 20px;
-  font-weight: bold;
-  color: #ef4444;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  background: var(--dark-surface);
+  border: 1px solid var(--dark-border);
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--sport-red);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   animation: fadeIn 0.3s;
   z-index: 10;
+  /* شکل برچسب ورزشی */
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
 }
-.mood-tooltip.happy { color: #4ade80; }
+
+.mood-tooltip.happy {
+  color: var(--sport-green);
+  border-color: rgba(0, 230, 118, 0.3);
+}
 
 @keyframes floatHappy {
-  0% { transform: translateY(0px) rotate(0deg); }
+  0%   { transform: translateY(0px) rotate(0deg); }
   100% { transform: translateY(-15px) rotate(3deg); }
 }
 
 @keyframes shakeSad {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-8px) rotate(-3deg); }
-  50% { transform: translateX(8px) rotate(3deg); }
-  75% { transform: translateX(-8px) rotate(-3deg); }
+  25%  { transform: translateX(-8px) rotate(-3deg); }
+  50%  { transform: translateX(8px)  rotate(3deg); }
+  75%  { transform: translateX(-8px) rotate(-3deg); }
 }
 
 /* =========================================
    7. صفحات موفقیت و داشبورد
 ========================================= */
-.success-section, .next-page-section {
+.success-section,
+.next-page-section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   text-align: center;
-  background: #18181b;
+  background: var(--dark-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* نور پیروزی */
+.success-section::before,
+.next-page-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 230, 118, 0.08) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .success-card {
-  background: #27272a;
+  background: var(--dark-card);
   padding: 50px;
-  border-radius: 30px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  border-radius: 20px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 0 1px var(--dark-border),
+    0 0 40px rgba(0, 230, 118, 0.05);
+  border-top: 3px solid var(--sport-green);
+  position: relative;
+  z-index: 1;
 }
 
-.success-card h2 { color: #4ade80; }
-.success-card p { color: #a1a1aa; }
+.success-card h2 {
+  color: var(--sport-green);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.success-card p {
+  color: var(--text-secondary);
+  margin-top: 10px;
+  line-height: 1.6;
+}
 
 /* =========================================
    8. طراحی واکنش‌گرا (موبایل)
 ========================================= */
 @media (max-width: 768px) {
-  .header h1 { font-size: 2rem; }
-  
+  .header h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+
   .coaches-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -482,79 +844,91 @@ body {
     margin-top: 10px;
     gap: 15px 5px;
   }
-  
+
   .coach {
-    width: 170px; 
+    width: 170px;
     margin: 0;
   }
-  
+
   .coach:nth-child(1) { transform: translateY(10px) rotate(-6deg); }
   .coach:nth-child(2) { transform: translateY(20px) rotate(6deg); }
   .coach:nth-child(3) { transform: translateY(-10px) rotate(-4deg); }
   .coach:nth-child(4) { transform: translateY(0px) rotate(4deg); }
-  
+
   .svg-wrapper {
-    width: 140px; 
+    width: 140px;
     height: 140px;
   }
-  
-  .coach-name { font-size: 1.1rem; }
 
- .coach.active {
+  .coach-name {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .coach.active {
     position: fixed;
     top: 50%;
     left: 50%;
-    /* مقیاس کاراکتر 1.2 است */
-    transform: translate(-50%, -40%) scale(1.2) !important; 
+    transform: translate(-50%, -40%) scale(1.2) !important;
     z-index: 1000;
-    margin: 0; 
+    margin: 0;
   }
-  
+
   .coach.active .speech-bubble {
     position: absolute;
     top: -110px;
     left: 50%;
-    
-    /* 
-      نکته طلایی اینجاست: 
-      چون والد 1.2 برابر بزرگ شده، ما حباب را با scale(0.83) کوچک میکنیم
-      (1 تقسیم بر 1.2 = 0.83) تا اثر بزرگنمایی والد خنثی شود.
-    */
-    transform: translateX(-50%) scale(0.83) !important; 
-    
-    /* حالا میتوانیم عرض حباب را با خیال راحت تنظیم کنیم */
-    width: 280px; 
+    transform: translateX(-50%) scale(0.83) !important;
+    width: 280px;
     max-width: none;
     text-align: center;
     z-index: 1001;
     white-space: normal;
-    font-size: 1rem; 
+    font-size: 1rem;
   }
 
-   .intro-container:has(.coach.active)::after {
+  .intro-container:has(.coach.active)::after {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(24, 24, 27, 0.85); 
+    background: rgba(17, 18, 20, 0.9);
     z-index: 900;
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
   }
 
   .speech-bubble {
     font-size: 0.9rem;
     padding: 12px;
-    width: 90vw; 
+    width: 90vw;
     max-width: 300px;
   }
 
-  .split-screen { flex-direction: column; }
+  .split-screen    { flex-direction: column; }
   .characters-half { padding: 30px 0; min-height: 40vh; }
-  .compact-coaches-container { transform: scale(0.95); }
-  .form-half { padding: 20px; min-height: 60vh; }
-  .form-box { padding: 30px 20px; }
-  .mood-tooltip { bottom: 10px; font-size: 0.85rem; }
-}
 
+  .compact-coaches-container { transform: scale(0.95); }
+
+  .form-half {
+    padding: 20px;
+    min-height: 60vh;
+    border-right: none;
+    /* خط بالایی جداکننده در موبایل */
+    border-top: 1px solid var(--dark-border);
+  }
+
+  .form-half::before { display: none; }
+  .form-box { padding: 28px 20px; }
+
+  .mood-tooltip {
+    bottom: 10px;
+    font-size: 0.8rem;
+  }
+
+  .btn {
+    clip-path: none;
+    border-radius: 8px;
+  }
+}
