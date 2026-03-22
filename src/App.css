@@ -1,7 +1,6 @@
 /* =========================================
    1. تنظیمات پایه و تم ورزشی دارک
 ========================================= */
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
 
 * {
   box-sizing: border-box;
@@ -26,7 +25,7 @@
 }
 
 body {
-  font-family: 'Vazirmatn', sans-serif;
+  font-family:  Calibri, sans-serif ;
   background-color: var(--dark-bg);
   color: var(--text-primary);
   overflow-x: hidden;
@@ -137,6 +136,7 @@ body {
 
 .header {
   text-align: center;
+  margin-top: 0px;
   margin-bottom: 40px;
   transition: opacity 0.3s ease;
   z-index: 10;
