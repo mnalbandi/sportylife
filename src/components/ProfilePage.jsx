@@ -14,8 +14,6 @@ const AVATAR_COMPONENTS = {
   panda:  PandaAvatar,
 };
 
-
-
 const coachesMap = {
   bear:   { name: "خرس بدنساز",       Component: BearCoach   },
   monkey: { name: "میمون کالیستنیکس",  Component: MonkeyCoach },
@@ -26,6 +24,7 @@ const coachesMap = {
 const coachQuestions = [
   { id: "body",    text: "وضعیت بدنی من چطوره؟", icon: "📊" },
   { id: "workout", text: "امروز چه تمرینی کنم؟",  icon: "🏋️" },
+  { id: "game",    text: "ورزش الکترونیکی",      icon: "🎮" },
   { id: "motivation", text: "بهم انگیزه بده!",    icon: "🔥" },
 ];
 
@@ -79,6 +78,7 @@ const ProfilePage = () => {
 
   // ── NEW: workout options state ──────────────────────────────────────────────
   const [showWorkoutOptions, setShowWorkoutOptions] = useState(false);
+  const [showGameOption, setShowGameOption] = useState(false);
 
   // ── Mouse → pupil tracking ──────────────────────────────────────────────────
   useEffect(() => {
@@ -121,8 +121,9 @@ const ProfilePage = () => {
   const handleCoachInteraction = useCallback((questionId) => {
     if (isReplying) return;
 
-    // Reset workout options on every new question
+    // Reset options on every new question
     setShowWorkoutOptions(false);
+    setShowGameOption(false);
     setActiveBubble(questionId);
     setIsReplying(true);
     setCoachReply("...");
@@ -131,9 +132,15 @@ const ProfilePage = () => {
       const bmi = bmiData.value;
 
       if (questionId === "workout") {
-        // ── Show the two workout options ──────────────────────────────────
         setCoachReply("می‌خوای چیکار کنی؟ 🤔");
         setShowWorkoutOptions(true);
+        setIsReplying(false);
+        return;
+      }
+
+      if (questionId === "game") {
+        setCoachReply("سرگرمی می‌خوای؟ بریم با بقیه بازی کنیم! 🎮");
+        setShowGameOption(true);
         setIsReplying(false);
         return;
       }
@@ -163,6 +170,13 @@ const ProfilePage = () => {
         : "بریم برنامه‌هات رو ببینیم! 📋"
     );
     setTimeout(() => navigate("/plan"), 600);
+  }, [navigate]);
+
+  // ── Game option click → navigate ───────────────────────────────────────────
+  const handleGameClick = useCallback(() => {
+    setShowGameOption(false);
+    setCoachReply("بریم بازی کنیم! 🎯");
+    setTimeout(() => navigate("/game"), 600);
   }, [navigate]);
 
   // ── Logout ──────────────────────────────────────────────────────────────────
@@ -333,6 +347,18 @@ const ProfilePage = () => {
                       onClick={() => handleWorkoutOptionClick("existing")}
                     >
                       📋 برنامه‌های من
+                    </button>
+                  </div>
+                )}
+
+                {/* ── Game option ──────────────────────────────────────── */}
+                {showGameOption && (
+                  <div className="workout-options">
+                    <button
+                      className="workout-option-btn workout-option-btn--game"
+                      onClick={handleGameClick}
+                    >
+                      🎮 بریم
                     </button>
                   </div>
                 )}

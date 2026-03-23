@@ -5,6 +5,7 @@ import UserInfoPage from './UserInfoPage';
 import ProfilePage from './ProfilePage';
 import { BearCoach, MonkeyCoach, RabbitCoach, PandaCoach } from "./Coaches";
 import PlanPage from './PlanPage';
+import GamePage from './GamePage';
 
 
 
@@ -353,6 +354,7 @@ const FitnessApp = () => {
 />
 <Route path='/profile' element={<ProfilePage/>} />
 <Route path='/plan' element={<PlanPage/>} />
+<Route path='/game' element={<GamePage/>} />
 
       </Routes>
     </main>

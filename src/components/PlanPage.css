@@ -1,0 +1,314 @@
+.plan-page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  padding: 20px;
+  direction: rtl;
+  color: #e0e0e0;
+}
+
+/* header */
+.plan-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.plan-header h1 {
+  color: #ffffff;
+  font-size: 2rem;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255,69,0,0.4);
+}
+
+.back-btn {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: #ff4500;
+  border-color: #ff4500;
+  color: white;
+}
+
+/* tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.tab {
+  flex: 1;
+  padding: 15px;
+  background: #141414;
+  border: 2px solid #222;
+  border-radius: 12px;
+  color: #bbb;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tab:hover {
+  border-color: #ff4500;
+  color: #ff4500;
+}
+
+.tab.active {
+  background: #ff4500;
+  color: white;
+  border-color: #ff4500;
+}
+
+/* grid */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(350px,1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+/* card */
+.plan-card {
+  background: #111;
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid #222;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  transition: all 0.3s;
+}
+
+.plan-card:hover {
+  transform: translateY(-6px);
+  border-color: #ff4500;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.8);
+}
+
+.plan-card.saved {
+  border: 2px solid #00e676;
+}
+
+/* header */
+.plan-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.plan-header-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.4rem;
+}
+
+/* level */
+.level-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.level-badge.مبتدی {
+  background: #00c853;
+  color: white;
+}
+
+.level-badge.پیشرفته {
+  background: #ff9800;
+  color: white;
+}
+
+.level-badge.حرفه‌ای {
+  background: #ff3d00;
+  color: white;
+}
+
+/* info */
+.plan-info {
+  margin-bottom: 20px;
+  color: #999;
+}
+
+.saved-date {
+  font-size: 0.9rem;
+  color: #00e676;
+  font-weight: bold;
+}
+
+/* exercises */
+.exercises-list {
+  background: #0f0f0f;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.exercise-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  border-right: 4px solid #ff4500;
+}
+
+.exercise-name {
+  font-weight: bold;
+  color: #fff;
+}
+
+.exercise-details {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* buttons */
+.save-plan-btn,
+.remove-plan-btn,
+.view-detail-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s;
+}
+
+.save-plan-btn {
+  background: #00c853;
+  color: white;
+}
+
+.save-plan-btn:hover {
+  background: #00e676;
+}
+
+.remove-plan-btn {
+  background: #ff1744;
+  color: white;
+}
+
+.remove-plan-btn:hover {
+  background: #ff4569;
+}
+
+.view-detail-btn {
+  background: #ff4500;
+  color: white;
+}
+
+.view-detail-btn:hover {
+  background: #ff6a33;
+}
+
+/* empty */
+.empty-state {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 60px 20px;
+  background: #111;
+  border-radius: 16px;
+  color: #bbb;
+}
+
+.empty-state button {
+  padding: 12px 30px;
+  background: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.empty-state button:hover {
+  transform: scale(1.05);
+}
+
+/* modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #111;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #333;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #ff1744;
+  color: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.modal-content h2 {
+  color: #fff;
+}
+
+.modal-details {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.modal-details p {
+  color: #aaa;
+}
+
+.exercise-detail-item {
+  background: #181818;
+  padding: 15px;
+  border-radius: 12px;
+  border-right: 4px solid #ff4500;
+}
+
+.exercise-detail-item h4 {
+  color: #fff;
+}
+
+.exercise-detail-item p {
+  color: #aaa;
+}
+
+/* responsive */
+@media (max-width:768px){
+  .plans-grid{
+    grid-template-columns:1fr;
+  }
+
+  .plan-header h1{
+    font-size:1.5rem;
+  }
+}
